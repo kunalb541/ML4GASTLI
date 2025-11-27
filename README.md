@@ -2,164 +2,64 @@ GASTLI Surrogate Model
 
 A Fast Machine Learning Surrogate for the GASTLI Interior-Atmosphere Code
 
-📖 Overview
+This repository contains a trained Neural Network that acts as a surrogate for the GASTLI simulation code. It predicts planetary interior properties in milliseconds.
 
-This repository contains a trained Heteroskedastic Neural Network that serves as a surrogate model for the GASTLI (General Atmospheric Structure and Thermal evolution of Large Interiors) simulation code.
+Repository Contents
 
-Calculating planetary interiors usually requires computationally expensive physical simulations (taking seconds to hours). This ML model approximates those physics to predict key planetary properties in milliseconds, enabling rapid Bayesian inference (MCMC) and atmospheric retrievals.
+predict.py: User Script. Edit this file to define your planet parameters and run the model.
 
-📂 Repository Structure
+gastli_core.py: Core Logic. Handles loading the model and converting units.
 
-File
+requirements.txt: Dependencies. List of libraries needed to run the code.
 
-Description
+models/: (Required) You must create this folder and put your trained files in it.
 
-predict.py
+Installation
 
-Main User Script. Edit inputs here to run the model.
+Clone or download this repository.
 
-gastli_core.py
+Install the required libraries:
 
-Backend Logic. Handles model loading, scaling, and physical unit conversions.
-
-requirements.txt
-
-List of Python dependencies.
-
-models/
-
-(Required) Folder containing the trained neural network and scalers.
-
-⚙️ Installation
-
-1. Prerequisite
-
-Ensure you have Python 3.9 or newer installed.
-
-2. Setup
-
-Clone the repository and install the required libraries:
-
-git clone [https://github.com/YOUR_USERNAME/gastli-surrogate-model.git](https://github.com/YOUR_USERNAME/gastli-surrogate-model.git)
-cd gastli-surrogate-model
 pip install -r requirements.txt
 
 
-3. Model Artifacts (Crucial Step)
+Crucial Step: Create a folder named models in this directory and place your trained files inside it:
 
-You must create a directory named models in the root folder and populate it with the trained artifacts. These files are too large for standard git and should be provided separately or via Git LFS:
+final_heteroskedastic_model.h5
 
-models/final_heteroskedastic_model.h5
+X_scaler.joblib
 
-models/X_scaler.joblib
+Y_scaler.joblib
 
-models/Y_scaler.joblib
+How to Run
 
-🚀 Usage
+Open predict.py in a text editor.
 
-Open predict.py in your code editor.
+Edit the INPUTS section with your planet's Mass, Temperature, etc.
 
-Modify the INPUTS dictionary with your planet parameters:
-
-INPUTS = {
-    'mass_MEarth': 5.5,      # Mass (Earth Masses)
-    'CMF': 0.33,             # Core Mass Fraction
-    'Zenv': 0.02,            # Envelope Metallicity
-    'Zwater_core': 0.0,      # Core Water Fraction
-    'Tsurf_K': 1500.0,       # Surface Temperature (K)
-    'Psurf_bar': 100.0       # Surface Pressure (bar)
-}
-
-
-Run the inference script:
+Run the script in your terminal:
 
 python predict.py
 
 
-📊 Model Parameters
+Parameter Ranges (Valid Inputs)
 
-Inputs
+Mass: 0.1 to 600 Earth Masses
 
-The model is trained on a specific grid of parameters. For best accuracy, keep inputs within these ranges:
+Core Mass Fraction (CMF): 0.0 to 0.99
 
-Parameter
+Envelope Metallicity (Zenv): 0.0 to 1.0
 
-Symbol
+Core Water (Zwater): 0.0 to 0.5
 
-Unit
+Surface Temperature: 700 to 6000 K
 
-Valid Range
-
-Description
-
-Mass
-
-$M_p$
-
-$M_\oplus$
-
-0.1 - 600
-
-Planet mass (Earth masses)
-
-CMF
-
--
-
--
-
-0.0 - 0.99
-
-Core Mass Fraction
-
-Metallicity
-
-$Z_{env}$
-
--
-
-0.0 - 1.0
-
-Envelope metal mass fraction
-
-Water (Core)
-
-$Z_{water}$
-
--
-
-0.0 - 0.5
-
-Water mass fraction in core
-
-Surface Temp
-
-$T_{surf}$
-
-K
-
-700 - 6000
-
-Temperature at boundary
-
-Surface Press
-
-$P_{surf}$
-
-bar
-
-1 - 1000
-
-Pressure at boundary
+Surface Pressure: 1 to 1000 bar
 
 Outputs
 
-The model predicts the following internal properties:
+Radius: In Earth Radii.
 
-Radius ($R_p$): The planetary radius in Earth radii ($R_\oplus$).
+Entropy: At 1000 bar (J/kg/K).
 
-Entropy ($S_{1000}$): Specific entropy at 1000 bar ($J \cdot kg^{-1} \cdot K^{-1}$).
-
-Thermal Parameter ($f_s$): The integrated mass-temperature profile ($J \cdot K^{-1}$).
-
-Note: The raw model predicts a signed log transformation of $f_s$. The code automatically converts this back to physical units.
+Thermal Parameter (fs): Integrated mass-temperature profile (J/K).
