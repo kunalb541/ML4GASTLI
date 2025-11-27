@@ -1,65 +1,74 @@
-GASTLI Surrogate Model
+# GASTLI Surrogate Model
 
-A Fast Machine Learning Surrogate for the GASTLI Interior-Atmosphere Code
+A neural network surrogate for the GASTLI planetary interior-atmosphere simulation code. Predicts planetary properties with uncertainty estimates.
 
-This repository contains a trained Neural Network that acts as a surrogate for the GASTLI simulation code. It predicts planetary interior properties in milliseconds.
+## Overview
 
-Repository Contents
+This model predicts three outputs given six planetary parameters:
+- **Inputs:** mass, core mass fraction, envelope metallicity, core water fraction, surface temperature, surface pressure
+- **Outputs:** planetary radius, entropy, thermal parameter (f_s)
 
-predict.py: User Script. Edit this file to define your planet parameters and run the model.
+The model provides both mean predictions and uncertainty estimates using heteroskedastic neural networks.
 
-gastli_core.py: Core Logic. Handles loading the model and converting units.
+## Parameter Ranges
 
-requirements.txt: Dependencies. List of libraries needed to run the code.
+| Parameter | Range | Unit |
+|-----------|-------|------|
+| mass_MEarth | 0.1 - 600 | Earth masses |
+| CMF | 0.0 - 1.0 | fraction |
+| Zenv | 0.0 - 1.0 | fraction |
+| Zwater_core | 0.0 - 0.5 | fraction |
+| Tsurf_K | varies | Kelvin |
+| Psurf_bar | varies | bar |
 
-models/: (Required) You must create this folder and put your trained files in it.
-
-Installation
-
-Clone or download this repository.
-
-Install the required libraries:
-
+## Installation
+```bash
 pip install -r requirements.txt
+```
 
+## Setup
 
-Crucial Step: Create a folder named models in this directory and place your trained files inside it:
+1. Create a `models/` directory in the repository root
+2. Place the following trained model files in `models/`:
+   - `final_heteroskedastic_model.h5`
+   - `X_scaler.joblib`
+   - `Y_scaler.joblib`
 
-final_heteroskedastic_model.h5
+## Usage
 
-X_scaler.joblib
+Edit the parameters in `predict.py`:
+```python
+INPUTS = {
+    'mass_MEarth': 1.0,
+    'CMF': 0.33,
+    'Zenv': 0.02,
+    'Zwater_core': 0.0,
+    'Tsurf_K': 1500.0,
+    'Psurf_bar': 100.0
+}
+```
 
-Y_scaler.joblib
-
-How to Run
-
-Open predict.py in a text editor.
-
-Edit the INPUTS section with your planet's Mass, Temperature, etc.
-
-Run the script in your terminal:
-
+Run the prediction:
+```bash
 python predict.py
+```
 
+## Output
 
-Parameter Ranges (Valid Inputs)
+The model returns:
+- `radius_Rearth`: Planetary radius in Earth radii
+- `entropy_SI`: Specific entropy in J kg⁻¹ K⁻¹
+- `f_s_SI`: Thermal parameter in J K⁻¹
 
-Mass: 0.1 to 600 Earth Masses
+## Files
 
-Core Mass Fraction (CMF): 0.0 to 0.99
+- `predict.py` - Main script for running predictions
+- `gastli_core.py` - Model loading and prediction logic
+- `t.py` - Training script (reference only)
+- `requirements.txt` - Python dependencies
 
-Envelope Metallicity (Zenv): 0.0 to 1.0
+## Notes
 
-Core Water (Zwater): 0.0 to 0.5
-
-Surface Temperature: 700 to 6000 K
-
-Surface Pressure: 1 to 1000 bar
-
-Outputs
-
-Radius: In Earth Radii.
-
-Entropy: At 1000 bar (J/kg/K).
-
-Thermal Parameter (fs): Integrated mass-temperature profile (J/K).
+- The model uses a signed logarithmic transformation for f_s internally and converts back to physical values automatically
+- Predictions include uncertainty estimates (variance/confidence intervals) which are available in the full model output
+- Input values outside the training range may produce unreliable predictions
