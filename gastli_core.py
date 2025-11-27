@@ -41,7 +41,7 @@ class GastliModel:
                 'heteroskedastic_loss': heteroskedastic_loss,
                 'mean_prediction_loss': mean_prediction_loss,
                 'variance_prediction_loss': variance_prediction_loss
-            }
+            },compile=False 
         )
         return True
 

@@ -1,6 +1,6 @@
 # GASTLI Surrogate Model
 
-A neural network surrogate for the GASTLI planetary interior-atmosphere simulation code. Predicts planetary properties with uncertainty estimates.
+A neural network surrogate for the GASTLI planetary interiors.
 
 ## Overview
 
@@ -23,6 +23,7 @@ The model provides both mean predictions and uncertainty estimates using heteros
 
 ## Installation
 ```bash
+#Create a new environment before
 pip install -r requirements.txt
 ```
 
