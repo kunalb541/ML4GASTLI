@@ -18,8 +18,8 @@ The model provides both mean predictions and uncertainty estimates using heteros
 | CMF | 0.0 - 1.0 | fraction |
 | Zenv | 0.0 - 1.0 | fraction |
 | Zwater_core | 0.0 - 0.5 | fraction |
-| Tsurf_K | varies | Kelvin |
-| Psurf_bar | varies | bar |
+| Tsurf_K | 700 - 6000| Kelvin |
+| Psurf_bar | 1 - 1000 | bar |
 
 ## Installation
 ```bash
