@@ -1,6 +1,6 @@
 # Core ML libraries (Versions needed to load your specific files)
 tensorflow>=2.16.1
-scikit-learn>=1.5.0
+scikit-learn==1.6.1
 
 # Data manipulation
 pandas>=2.0.0
