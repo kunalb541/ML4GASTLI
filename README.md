@@ -23,7 +23,8 @@ The model provides both mean predictions and uncertainty estimates using heteros
 
 ## Installation
 ```bash
-#Create a new environment before
+conda create -n ML4GASTLI python=3.10 -y
+conda activate ML4GASTLI
 pip install -r requirements.txt
 ```
 
