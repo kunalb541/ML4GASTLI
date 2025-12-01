@@ -19,19 +19,23 @@ def main():
     print("="*50)
 
     # Load the model
-    print("Status: Loading Neural Network...", end=" ")
+    print("Status: Loading ResNet Model...", end=" ")
     try:
         model = GastliModel(model_dir='models')
         model.load()
         print("Success.")
     except Exception as e:
         print(f"\n\nERROR: {e}")
-        print("Make sure you have a folder named 'models' with your .h5 and .joblib files!")
+        print("Ensure you have a 'models' folder with: final_model.keras, x_scaler.joblib, y_scaler.joblib")
         return
 
     # Run Prediction
     print("Status: Running Inference...")
-    results = model.predict(INPUTS)
+    try:
+        results = model.predict(INPUTS)
+    except Exception as e:
+        print(f"Prediction Error: {e}")
+        return
 
     # Display Inputs
     print("-" * 50)

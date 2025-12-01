@@ -1,6 +1,6 @@
 # GASTLI Surrogate Model
 
-A neural network surrogate for the GASTLI planetary interiors.
+A Deep Residual Neural Network (ResNet) surrogate for GASTLI planetary interiors.
 
 ## Overview
 
@@ -31,9 +31,9 @@ pip install -r requirements.txt
 
 1. Create a `models/` directory in the repository root
 2. Place the following trained model files in `models/`:
-   - `final_heteroskedastic_model.h5`
-   - `X_scaler.joblib`
-   - `Y_scaler.joblib`
+   - `final_model.keras`
+   - `x_scaler.joblib`
+   - `y_scaler.joblib`
 
 ## Usage
 
@@ -65,7 +65,6 @@ The model returns:
 
 - `predict.py` - Main script for running predictions
 - `gastli_core.py` - Model loading and prediction logic
-- `t.py` - Training script (reference only)
 - `requirements.txt` - Python dependencies
 
 ## Notes
