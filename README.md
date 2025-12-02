@@ -8,7 +8,6 @@ This model predicts three outputs given six planetary parameters:
 - **Inputs:** mass, core mass fraction, envelope metallicity, core water fraction, surface temperature, surface pressure
 - **Outputs:** planetary radius, entropy, thermal parameter (f_s)
 
-The model provides both mean predictions and uncertainty estimates using heteroskedastic neural networks.
 
 ## Parameter Ranges
 
