@@ -38,10 +38,8 @@ class GastliModel:
         Expected keys in inputs_dict:
         'mass_MEarth', 'CMF', 'Zenv', 'Zwater_core', 'Tsurf_K', 'Psurf_bar'
         """
-        # --- 1. Preprocessing (Must match train.py) ---
-        # We must create a dict that matches the TRAINING_FEATURES list
+        # --- 1. Preprocessing ---
         processed_input = {
-            # Log transform Mass and Pressure (adding epsilon not strictly necessary for inference if inputs > 0)
             'log_mass_MEarth': np.log10(inputs_dict['mass_MEarth']),
             'CMF': inputs_dict['CMF'],
             'Zenv': inputs_dict['Zenv'],
@@ -50,28 +48,37 @@ class GastliModel:
             'log_Psurf_bar': np.log10(inputs_dict['Psurf_bar'])
         }
 
-        # Convert to DataFrame with correct column order
+        # Align columns
         input_df = pd.DataFrame([processed_input])
         input_df = input_df[TRAINING_FEATURES]
         
         # --- 2. Scale Input ---
-        # Uses RobustScaler loaded from training
-        input_scaled = self.X_scaler.transform(input_df)
+        # We use .values to avoid "X has feature names" warning if scaler was trained on arrays
+        input_scaled = self.X_scaler.transform(input_df.values)
         
         # --- 3. Predict ---
-        # The model returns a list of 3 tensors: [radius_out, entropy_out, fs_out]
-        # We predict with verbose=0 to silence logs
-        raw_pred_list = self.model.predict(input_scaled, verbose=0)
+        raw_pred = self.model.predict(input_scaled, verbose=0)
         
-        # Stack them to shape (1, 3) for the scaler
-        # raw_pred_list is [array([[r]]), array([[s]]), array([[f]])]
-        pred_stacked = np.column_stack(raw_pred_list)
+        # --- FIX: Handle List vs Array & Dimensions ---
+        # Case A: Model returns list of tensors (Multi-output)
+        if isinstance(raw_pred, list):
+            pred_stacked = np.column_stack(raw_pred)
+        # Case B: Model returns single tensor
+        else:
+            pred_stacked = raw_pred
+
+        # FIX: Squeeze extra dimensions (e.g., from (1, 3, 1) to (1, 3))
+        # This resolves the "QuantileTransformer expected <= 2" error
+        if pred_stacked.ndim > 2:
+            pred_stacked = np.squeeze(pred_stacked)
+            # Safety: if batch=1 and we squeezed too much (to 1D), reshape back to (1, n_features)
+            if pred_stacked.ndim == 1:
+                pred_stacked = pred_stacked.reshape(1, -1)
 
         # --- 4. Inverse Scale Outputs ---
-        # Uses QuantileTransformer loaded from training
         preds_original_scale = self.Y_scaler.inverse_transform(pred_stacked)[0]
         
-        # Extract values (Note: Radius is still in log10 space here)
+        # Extract values
         log_radius = preds_original_scale[0]
         entropy = preds_original_scale[1]
         fs_log_signed = preds_original_scale[2]
@@ -82,7 +89,6 @@ class GastliModel:
         radius_physical = 10**log_radius
         
         # B. f_s: Model predicted signed_log10(fs), convert to physical
-        # Inverse of: sign(x) * log10(1 + |x|)
         fs_physical = np.sign(fs_log_signed) * (10**np.abs(fs_log_signed) - 1)
         
         return {
