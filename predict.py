@@ -33,6 +33,8 @@ def main():
     try:
         results = model.predict(INPUTS)
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         print(f"Prediction Error: {e}")
         return
 
