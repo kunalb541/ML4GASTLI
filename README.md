@@ -66,11 +66,11 @@ Edit the parameters at the top of [`predict.py`](predict.py):
 
 ```python
 INPUTS = {
-    'mass_MEarth': 1.0,
-    'CMF': 0.33,
-    'Zenv': 0.02,
+    'mass_MEarth': 100.0,
+    'CMF': 0.10,
+    'Zenv': 0.10,
     'Zwater_core': 0.0,
-    'Tsurf_K': 1500.0,
+    'Tsurf_K': 1000.0,
     'Psurf_bar': 100.0,
 }
 ```

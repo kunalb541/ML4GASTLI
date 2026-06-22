@@ -4,12 +4,12 @@ from gastli_core import GastliModel
 #   STEP 1: DEFINE PLANET PARAMETERS
 # ==========================================
 INPUTS = {
-    'mass_MEarth': 1.0,      # Mass in Earth Masses (0.1 - 600)
-    'CMF': 0.33,             # Core Mass Fraction (0.0 - 1.0)
-    'Zenv': 0.0,             # Envelope Metallicity (0.0 - 1.0)
+    'mass_MEarth': 100.0,    # Mass in Earth Masses (0.1 - 600)
+    'CMF': 0.10,             # Core Mass Fraction (0.0 - 1.0)
+    'Zenv': 0.10,            # Envelope Metallicity (0.0 - 1.0)
     'Zwater_core': 0.0,      # Core Water Fraction (0.0 - 0.5)
-    'Tsurf_K': 288.0,        # Surface Temperature in Kelvin
-    'Psurf_bar': 1.0         # Surface Pressure in Bar
+    'Tsurf_K': 1000.0,       # Surface Temperature in Kelvin (700 - 6000)
+    'Psurf_bar': 100.0       # Surface Pressure in Bar (1 - 1000)
 }
 
 def main():
