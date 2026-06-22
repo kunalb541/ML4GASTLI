@@ -19,12 +19,17 @@ outputs that reproduces its key predictions almost instantly, so it can stand
 in for the full model wherever speed matters (e.g. MCMC retrievals, population
 synthesis, interactive exploration).
 
-## Attribution
+## Authors
 
-This surrogate was developed at the **Max Planck Institute for Astronomy
-(MPIA), Heidelberg**, in collaboration with **[Lorena Acuña][lorena]** (the
-author of GASTLI). The underlying physical model, GASTLI, and its training data
-are her work; please credit and cite GASTLI accordingly (see
+Developed by **Kunal Bhatia** at the **Max Planck Institute for Astronomy
+(MPIA), Heidelberg** — ran the GASTLI simulations, generated the training set,
+and built and trained the surrogate network.
+
+## Acknowledgments
+
+Conceived and supervised by **[Lorena Acuña][lorena]** (MPIA), author of the
+[GASTLI][gastli] model that this surrogate emulates and that the training data
+was generated from. Please cite GASTLI if you use this work (see
 [Citing](#citing)).
 
 ## What it predicts
@@ -119,7 +124,7 @@ If you use this surrogate, please cite the underlying GASTLI model:
 ## License
 
 Released under the [BSD 3-Clause License](LICENSE), matching GASTLI.
-© 2025 Kunal Bhatia and Lorena Acuña, Max Planck Institute for Astronomy (MPIA).
+© 2025 Kunal Bhatia, Max Planck Institute for Astronomy (MPIA).
 
 [gastli]: https://github.com/lorenaacuna/GASTLI
 [lorena]: https://lorenaacuna.github.io
